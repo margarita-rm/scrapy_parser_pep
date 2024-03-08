@@ -8,7 +8,7 @@
 [Telegram](https://t.me/margarita_rm)
 
 ### Cтек используемых технологий:  
-Python, библиотеки: csv, Scrapy
+Python, Scrapy
 
 ### Как развернуть проект:
 

@@ -5,12 +5,12 @@ from ..items import PepParseItem
 class PepSpider(scrapy.Spider):
     name = 'pep'
     allowed_domains = ['peps.python.org']
-    start_urls = ['https://peps.python.org/']
+    start_urls = [f'https://{domain}/' for domain in allowed_domains]
 
     def parse(self, response):
         """Должен собирать ссылки на документы PEP."""
         main_tag = response.css('section#pep-content')
-        rows = main_tag.css("tr.row-even, tr.row-odd")
+        rows = main_tag.css('tr.row-even, tr.row-odd')
 
         for row in rows[1:]:
             columns = row.css('td')
@@ -23,13 +23,12 @@ class PepSpider(scrapy.Spider):
             url = columns.css('a::attr(href)')
             if not url:
                 continue
+            number = number_tag.get()
+            name = name_tag.get()
             yield response.follow(
                 url.get(),
                 callback=self.parse_pep,
-                cb_kwargs={
-                    'number': number_tag.get(),
-                    'name': name_tag.get(),
-                }
+                cb_kwargs={'number': number, 'name': name}
             )
 
     def parse_pep(self, response, number, name):
