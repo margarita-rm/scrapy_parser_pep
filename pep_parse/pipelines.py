@@ -11,6 +11,7 @@ BASE_DIR = Path(__file__).parent.parent
 class PepParsePipeline:
 
     def open_spider(self, spider):
+        (BASE_DIR / RESULTS_DIR).mkdir(exist_ok=True)
         self.statuses = defaultdict(int)
 
     def process_item(self, item, spider):
@@ -30,11 +31,8 @@ class PepParsePipeline:
                 file, quoting=csv.QUOTE_MINIMAL, dialect=csv.excel
             ).writerows(
                 [
-                    ['Статус', 'Количество'],
-                    *[
-                        [key, value]
-                        for key, value in self.statuses.items()
-                    ],
+                    ['Status', 'Amount'],
+                    *self.statuses.items(),
                     ['Total', sum(self.statuses.values())]
                 ]
             )
