@@ -10,8 +10,10 @@ BASE_DIR = Path(__file__).parent.parent
 
 class PepParsePipeline:
 
-    def open_spider(self, spider):
+    def __init__(self):
         (BASE_DIR / RESULTS_DIR).mkdir(exist_ok=True)
+
+    def open_spider(self, spider):
         self.statuses = defaultdict(int)
 
     def process_item(self, item, spider):
